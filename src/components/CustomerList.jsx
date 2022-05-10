@@ -7,7 +7,6 @@ import { IconButton } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "@mui/material/Button";
 import AddCustomer from "./AddCustomer";
 import EditCustomer from "./EditCustomer";
 import AddTraining from "./AddTraining";
@@ -36,6 +35,22 @@ function CustomerList() {
       .catch((err) => console.error(err));
   }
 
+  const postCustomer = (customer) => {
+    fetch("https://customerrest.herokuapp.com/api/customers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(customer),
+    })
+      .then((response) => {
+        if (response.ok) {
+          fetchCustomers();
+        } else {
+          alert("Something went wrong");
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+
   function deleteCustomer(link) {
     if (window.confirm("Are you sure?")) {
       fetch(link, { method: "DELETE" })
@@ -58,6 +73,7 @@ function CustomerList() {
     {
       field: "links.0.href",
       headerName: "",
+      width: 100,
       cellRenderer: (params) => (
         <IconButton
           color="error"
@@ -70,7 +86,7 @@ function CustomerList() {
     },
     {
       headerName: "",
-      width: 120,
+      width: 100,
       field: "links.0.href",
       cellRenderer: (params) => (
         <EditCustomer params={params} fetchCustomers={fetchCustomers} />
@@ -78,21 +94,15 @@ function CustomerList() {
     },
     {
       headerName: "Add training",
-      width: 120,
+      width: 170,
       field: "links.0.href",
       cellRenderer: (params) => <AddTraining params={params} />,
-    },
-    {
-      field: "links.2.href",
-      headerName: "",
-      cellRenderer: (params) => <Button href={params.value}>Trainings</Button>,
-      width: 500,
     },
   ]);
 
   return (
     <>
-      <AddCustomer fetchCustomers={fetchCustomers}></AddCustomer>
+      <AddCustomer postCustomer={postCustomer}></AddCustomer>
       <div
         className="ag-theme-material"
         style={{ height: 800, width: "100vw" }}

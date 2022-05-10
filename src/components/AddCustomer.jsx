@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
-function AddCustomer({ fetchCustomers }) {
+function AddCustomer({ postCustomer }) {
   const [open, setOpen] = React.useState(false);
   const [customer, setCustomer] = React.useState({
     firstname: "",
@@ -31,19 +31,7 @@ function AddCustomer({ fetchCustomers }) {
   };
 
   const handleSave = (customer) => {
-    fetch("https://customerrest.herokuapp.com/api/customers", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(customer),
-    })
-      .then((response) => {
-        if (response.ok) {
-          fetchCustomers();
-        } else {
-          alert("Something went wrong");
-        }
-      })
-      .catch((err) => console.error(err));
+    postCustomer(customer);
     setCustomer({
       firstname: "",
       lastname: "",
