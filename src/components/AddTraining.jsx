@@ -5,18 +5,15 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import DatePicker from "@mui/lab/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
-function AddTraining({ fetchCustomers: fetchTrainings }) {
+function AddTraining(params) {
   const [open, setOpen] = React.useState(false);
   const [training, setTraining] = React.useState({
-    firstname: "",
-    lastname: "",
-    streetaddress: "",
-    postcode: "",
-    city: "",
-    email: "",
-    phone: "",
+    datetime: null,
+    activity: "",
+    duration: "",
+    customer: params.params.value,
   });
 
   const inputChanged = (event) => {
@@ -31,29 +28,25 @@ function AddTraining({ fetchCustomers: fetchTrainings }) {
     setOpen(false);
   };
 
-  const handleSave = (customer) => {
-    fetch("https://customerrest.herokuapp.com/api/customers", {
+  const handleSave = (training) => {
+    fetch("https://customerrest.herokuapp.com/api/trainings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(customer),
+      body: JSON.stringify(training),
     })
       .then((response) => {
         if (response.ok) {
-          fetchTrainings();
+          console.log("Training added");
         } else {
           alert("Something went wrong");
         }
       })
       .catch((err) => console.error(err));
     setTraining({
-      firstname: "",
-      lastname: "",
-      streetaddress: "",
-      postcode: "",
-      city: "",
-      email: "",
-      phone: "",
       date: null,
+      activity: "",
+      duration: "",
+      customer: "",
     });
     handleClose();
   };
@@ -61,83 +54,39 @@ function AddTraining({ fetchCustomers: fetchTrainings }) {
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
-        Add Customer
+        Add Training
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>New Customer</DialogTitle>
+        <DialogTitle>New Training</DialogTitle>
         <DialogContent>
           <TextField
             margin="dense"
-            name="firstname"
-            value={training.firstname}
+            name="activity"
+            value={training.activity}
             onChange={inputChanged}
-            label="Firstname"
+            label="activity"
             fullWidth
             variant="standard"
           />
           <TextField
             margin="dense"
-            name="lastname"
-            value={training.lastname}
+            name="duration"
+            value={training.duration}
             onChange={inputChanged}
-            label="lastname"
+            label="duration"
             fullWidth
             variant="standard"
           />
-          <TextField
+          <DateTimePicker
             margin="dense"
-            name="streetaddress"
-            value={training.streetaddress}
-            onChange={inputChanged}
-            label="Street address"
+            name="datetime"
             fullWidth
             variant="standard"
+            label="Date and Time picker"
+            value={training.datetime}
+            onChange={inputChanged}
+            renderInput={(params) => <TextField {...params} />}
           />
-          <TextField
-            margin="dense"
-            name="postcode"
-            value={training.postcode}
-            onChange={inputChanged}
-            label="Postcode"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            margin="dense"
-            name="city"
-            value={training.city}
-            onChange={inputChanged}
-            label="City"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            margin="dense"
-            name="email"
-            value={training.email}
-            onChange={inputChanged}
-            label="Email"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            margin="dense"
-            name="phone"
-            value={training.phone}
-            onChange={inputChanged}
-            label="Phone"
-            fullWidth
-            variant="standard"
-          />
-          <DatePicker
-            margin="dense"
-            label="Date"
-            name="date"
-            value={training.date}
-            onChange={inputChanged}
-            fullWidth
-            variant="standard"
-          ></DatePicker>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

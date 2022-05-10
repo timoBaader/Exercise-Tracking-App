@@ -9,6 +9,8 @@ import MuiAlert from "@mui/material/Alert";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import AddCustomer from "./AddCustomer";
+import EditCustomer from "./EditCustomer";
+import AddTraining from "./AddTraining";
 
 function CustomerList() {
   const [customers, setCustomers] = useState([]);
@@ -66,12 +68,25 @@ function CustomerList() {
         </IconButton>
       ),
     },
-
+    {
+      headerName: "",
+      width: 120,
+      field: "links.0.href",
+      cellRenderer: (params) => (
+        <EditCustomer params={params} fetchCustomers={fetchCustomers} />
+      ),
+    },
+    {
+      headerName: "Add training",
+      width: 120,
+      field: "links.0.href",
+      cellRenderer: (params) => <AddTraining params={params} />,
+    },
     {
       field: "links.2.href",
       headerName: "",
       cellRenderer: (params) => <Button href={params.value}>Trainings</Button>,
-      witdh: 500,
+      width: 500,
     },
   ]);
 

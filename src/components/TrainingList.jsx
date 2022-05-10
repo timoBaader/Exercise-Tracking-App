@@ -7,7 +7,6 @@ import { IconButton } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddTraining from "./AddTraining";
 
 function TrainingList() {
   const [trainings, setTrainings] = useState([]);
@@ -81,7 +80,6 @@ function TrainingList() {
 
   return (
     <>
-      <AddTraining></AddTraining>
       <div
         className="ag-theme-material"
         style={{ height: 800, width: "100vw" }}
